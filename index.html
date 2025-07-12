@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Directory</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>Employee Directory</h1>
+                <div class="header-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by name or email">
+                    </div>
+                    <div class="filter-section">
+                        <button id="filterBtn">
+                            Filter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Section (Sort, Show, Add Employee) -->
+    <div class="control-section">
+        <div class="container">
+            <div class="control-left">
+                <div class="sort-controls">
+                    <label for="sortBy">Sort by:</label>
+                    <select id="sortBy">
+                        <option value="name">Name</option>
+                        <option value="department">Department</option>
+                        <option value="position">Role</option>
+                    </select>
+                </div>
+                <div class="show-controls">
+                    <label for="showPages">Show:</label>
+                    <select id="showPages">
+                        <option value="5">5 per page</option>
+                        <option value="10">10 per page</option>
+                        <option value="25">25 per page</option>
+                        <option value="50">50 per page</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-right">
+                <button id="addEmployeeBtn" class="btn btn-primary">
+                    Add Employee
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content: Employee Cards Section -->
+    <div class="container">
+        <!-- <div class="main-content"> -->
+            <div class="employee-cards-section">
+                <div id="employeeContainer" class="employee-grid">
+                    <!-- Employee cards will be dynamically loaded here -->
+                </div>
+                <div id="noResults" class="no-results" style="display: none;">
+                    <h3>No employees found</h3>
+                    <p>Try adjusting your search criteria</p>
+                </div>
+            </div>
+        <!-- </div> -->
+    </div>
+
+    <!-- Add/Edit Employee Modal -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Employee</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="employeeForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="department">Department *</label>
+                        <select id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="HR">HR</option>
+                            <option value="Finance">Finance</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role *</label>
+                        <select id="role" name="role" required>
+                            <option value="">Select Role</option>
+                            <option value="Software Engineer">Software Engineer</option>
+                            <option value="Senior Software Engineer">Senior Software Engineer</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Account Executive">Account Executive</option>
+                            <option value="HR Specialist">HR Specialist</option>
+                            <option value="HR Manager">HR Manager</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this employee?</p>
+                <p class="employee-name" id="deleteEmployeeName"></p>
+            </div>
+            <div class="modal-actions">
+                <button id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Sidebar -->
+    <div id="filterSidebar" class="filter-sidebar">
+        <div class="filter-sidebar-content">
+            <div class="filter-sidebar-header">
+                <h2>Filter Employees</h2>
+                <span class="close" id="closeFilterSidebar">&times;</span>
+            </div>
+            <div class="filter-sidebar-body">
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label for="filterFirstName">First Name</label>
+                        <input type="text" id="filterFirstName" placeholder="Enter first name">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterDepartment">Department</label>
+                        <select id="filterDepartment">
+                            <option value="">All Departments</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="HR">HR</option>
+                            <option value="Finance">Finance</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterRole">Role</label>
+                        <select id="filterRole">
+                            <option value="">All Roles</option>
+                            <option value="Software Engineer">Software Engineer</option>
+                            <option value="Senior Software Engineer">Senior Software Engineer</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Account Executive">Account Executive</option>
+                            <option value="HR Specialist">HR Specialist</option>
+                            <option value="HR Manager">HR Manager</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button type="button" id="resetFilterBtn" class="btn btn-secondary">Reset</button>
+                        <button type="button" id="applyFilterBtn" class="btn btn-primary">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Employee Directory. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/employee-data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
