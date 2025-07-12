@@ -1,5 +1,7 @@
 # Employee Directory
 
+**Developed by: jvaswamy**
+
 A modern, responsive employee management application built with vanilla JavaScript, HTML5, CSS3, and Freemarker templating. This application provides a comprehensive solution for managing employee data with advanced filtering, sorting, and CRUD operations.
 
 ## Features
